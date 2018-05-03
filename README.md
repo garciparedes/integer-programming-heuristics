@@ -1,1 +1,4 @@
-# linear-programming-heuristics
+# Programación Lineal: Heurísticas
+
+## Descripción
+TODO

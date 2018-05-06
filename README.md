@@ -8,9 +8,9 @@ TODO
 
 ## Contenidos
 
-    * [Notebook](integer-programming-heuristics.ipynb)
+   * [Notebook](integer-programming-heuristics.ipynb)
 
 
 ## Autores
     
-    * Sergio García Prado - [@garciparedes](http://garciparedes.me)
+   * Sergio García Prado - [@garciparedes](http://garciparedes.me)

@@ -10,6 +10,7 @@ TODO
 
    * [Notebook - Assignment Heuristics](integer-programming-assignment-heuristics.ipynb)
    * [Notebook - Knapsack Heuristics](integer-programming-knapsack-heuristics.ipynb)
+   * [Notebook - Network Heuristics](integer-programming-network-heuristics.ipynb)
 
 
 ## Autores

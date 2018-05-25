@@ -11,12 +11,15 @@ Set of heuristics to take advantage on Integer Programming problems significantl
   * Assignment Heuristics
     * [raw](integer-programming-assignment-heuristics.ipynb)
     * [nbviewer](https://nbviewer.jupyter.org/github/garciparedes/integer-programming-heuristics/blob/master/integer-programming-assignment-heuristics.ipynb)
-  * Knapsack Heuristics
+  * Knapsack and Bin-Packing Heuristics
     * [raw](integer-programming-knapsack-heuristics.ipynb)
     * [nbviewer](https://nbviewer.jupyter.org/github/garciparedes/integer-programming-heuristics/blob/master/integer-programming-knapsack-heuristics.ipynb)
   * Network Heuristics
     * [raw](integer-programming-network-heuristics.ipynb)
     * [nbviewer](https://nbviewer.jupyter.org/github/garciparedes/integer-programming-heuristics/blob/master/integer-programming-network-heuristics.ipynb)
+  * Service Location Heuristics
+    * [raw](integer-programming-service-location-heuristics.ipynb)
+    * [nbviewer](https://nbviewer.jupyter.org/github/garciparedes/integer-programming-heuristics/blob/master/integer-programming-service-location-heuristics.ipynb)
 
 
 ## Authors

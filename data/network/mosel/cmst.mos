@@ -1,66 +1,41 @@
-model "single-source-transportation-model-1"
-
-    !----------------------------------------------------------------------------------------
-    ! Sergio García Prado - garciparedes.me
-    ! April 2018
-    !----------------------------------------------------------------------------------------
-
+model "cmst"
     uses "mmxprs";
-    
-    
     declarations
         n: integer
         file_name = "gr15_5"
     end-declarations
-    
     initializations from "mosel_input_" + file_name + ".dat"
         n
-    end-initializations
-
-
+    end-initializations 
     declarations
-        
         nodes = 1..n
-        
         b: array(nodes) of real
         A: array(nodes, nodes) of real
-        
         x: dynamic array(nodes, nodes) of mpvar
         y: dynamic array(nodes, nodes) of mpvar
     end-declarations
-    
     initializations from "mosel_input_" + file_name + ".dat"
         b A
     end-initializations
-    
-     
-   
     forall(i in nodes, j in nodes | A(i, j) <> 0) do
         create(x(i, j))
         create(y(i, j))
         y(i, j) is_binary
     end-do
-    
     forall(i in nodes) do
         res1(i) := sum(j in nodes) x(i, j) - sum(j in nodes) x(j, i) = b(i)
     end-do
-    
-    obj := sum(i in nodes, j in nodes | A(i, j) <> 0) y(i, j) * A(i, j)
-    
-  
-    
+    obj := sum(i in nodes, j in nodes | A(i, j) <> 0) y(i, j) * A(i, j)  
     forall(u in 1..n) do
         forall(i in nodes, j in nodes | A(i, j) <> 0) do 
             res2(i, j) := x(i, j) - y(i, j) * u <= 0
         end-do
         minimize(obj)
-        
-        fopen("mosel_output_" + file_name + "_"+ u +".csv", F_OUTPUT)
+        fopen("mosel_output_" + file_name + "_" + u +".csv", F_OUTPUT)
         writeln('"i","j"')
-        forall(i in nodes, j in nodes | getsol(y(i, j)) = 1) do
+        forall(i in nodes, j in nodes | abs(1 - getsol(y(i, j))) < 0.1) do
             writeln(i, ',', j)
         end-do
         fclose(F_OUTPUT)
     end-do
-    
 end-model

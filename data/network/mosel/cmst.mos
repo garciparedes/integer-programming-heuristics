@@ -1,7 +1,6 @@
 model "single-source-transportation-model-1"
 
     !----------------------------------------------------------------------------------------
-    ! Single Source Transportation - Model 1
     ! Sergio García Prado - garciparedes.me
     ! April 2018
     !----------------------------------------------------------------------------------------
@@ -56,7 +55,7 @@ model "single-source-transportation-model-1"
         end-do
         minimize(obj)
         
-        fopen("mose_output_" + file_name + "_"+ u +".csv", F_OUTPUT)
+        fopen("mosel_output_" + file_name + "_"+ u +".csv", F_OUTPUT)
         writeln('"i","j"')
         forall(i in nodes, j in nodes | getsol(y(i, j)) = 1) do
             writeln(i, ',', j)

@@ -2,7 +2,7 @@ model "cmst"
     uses "mmxprs";
     declarations
         n: integer
-        file_name = "gr15_5"
+        file_name = "gr15_1"
     end-declarations
     initializations from "mosel_input_" + file_name + ".dat"
         n

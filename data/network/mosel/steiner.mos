@@ -1,0 +1,51 @@
+model "cmst"
+    uses "mmxprs";
+    declarations
+        n: integer
+        file_name = "gr15_5"
+    end-declarations
+    initializations from "mosel_input_" + file_name + ".dat"
+        n
+    end-initializations 
+    declarations
+        nodes = 1..n
+        b: array(nodes) of real
+        A: array(nodes, nodes) of real
+        s: array(nodes) of real
+        x: dynamic array(nodes, nodes) of mpvar
+        y: dynamic array(nodes, nodes) of mpvar
+    end-declarations
+    initializations from "mosel_input_" + file_name + ".dat"
+        A s
+    end-initializations
+    
+    stnr := sum(i in nodes) s(i) 
+    ii := 1
+    while(s(ii) = 0 and ii < n )do
+        ii := ii + 1
+    end-do
+    b(ii) := stnr - 1
+    forall(i in (ii + 1)..n | s(i) <> 0) do
+        b(i) := -1
+    end-do
+    forall(i in nodes, j in nodes | A(i, j) <> 0) do
+        create(x(i, j))
+        create(y(i, j))
+        y(i, j) is_binary
+    end-do
+    forall(i in nodes) do
+        res1(i) := sum(j in nodes) x(i, j) - sum(j in nodes) x(j, i) = b(i) * s(i)
+    end-do
+    obj := sum(i in nodes, j in nodes | A(i, j) <> 0) y(i, j) * A(i, j) 
+    u := n
+    forall(i in nodes, j in nodes | A(i, j) <> 0) do 
+        res2(i, j) := x(i, j) - y(i, j) * u <= 0
+    end-do
+    minimize(obj)
+    fopen("mosel_output_" + file_name + "_steiner.csv", F_OUTPUT)
+    writeln('"i","j"')
+    forall(i in nodes, j in nodes | abs(1 - getsol(y(i, j))) < 0.1) do
+        writeln(i, ',', j)
+    end-do
+    fclose(F_OUTPUT)
+end-model

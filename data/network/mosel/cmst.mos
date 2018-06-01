@@ -22,10 +22,10 @@ model "cmst"
         create(y(i, j))
         y(i, j) is_binary
     end-do
+    obj := sum(i in nodes, j in nodes | A(i, j) <> 0) y(i, j) * A(i, j) 
     forall(i in nodes) do
         res1(i) := sum(j in nodes) x(i, j) - sum(j in nodes) x(j, i) = b(i)
     end-do
-    obj := sum(i in nodes, j in nodes | A(i, j) <> 0) y(i, j) * A(i, j)  
     forall(u in 1..n) do
         forall(i in nodes, j in nodes | A(i, j) <> 0) do 
             res2(i, j) := x(i, j) - y(i, j) * u <= 0

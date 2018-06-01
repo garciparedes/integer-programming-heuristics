@@ -1,4 +1,54 @@
 model "avicola"
     uses "mmxprs";
-
+    
+    declarations
+        n: integer
+        p: integer
+        e: integer
+        file_name = "avicola"
+    end-declarations
+    initializations from "mosel_input_" + file_name + ".dat"
+        n p e
+    end-initializations 
+    declarations
+        nodes = 1..n
+        products = 1..p
+        b: array(nodes, products) of real
+        edges: array(1..e, 1..(3 + p)) of integer
+        c: array(nodes, nodes, products) of real
+        f: array(nodes, nodes) of real
+        x: dynamic array(nodes, nodes, products) of mpvar
+        y: dynamic array(nodes, nodes) of mpvar
+    end-declarations
+    initializations from "mosel_input_" + file_name + ".dat"
+        b edges
+    end-initializations 
+    
+    forall(ee in 1..e) do
+        ii := edges(ee, 1)
+        jj := edges(ee, 2)
+       
+        create(y(ii, jj))
+        y(ii, jj) is_binary
+        f(ii, jj) := edges(ee, 3)
+        forall(k in products) do
+            create(x(ii, jj, k))
+            c(ii, jj, k) := edges(ee, 3 + k)
+        end-do
+    end-do
+    obj := sum(i in nodes, j in nodes | f(i, j) <> 0) (y(i, j) * f(i, j) + sum(k in products) x(i, j, k) * c(i, j, k)) 
+    forall(i in nodes, k in products) do
+        res1(i, k) := sum(j in nodes) x(i, j, k) - sum(j in nodes) x(j, i, k) = b(i, k)
+    end-do
+    forall(i in nodes, j in nodes | f(i, j) <> 0) do
+        res2(i, j) := sum(k in products) x(i, j, k) - y(i, j) * MAX_INT <= 0
+    end-do
+    minimize(obj)
+    writeln(getobjval)
+    fopen("mosel_output_" + file_name + ".csv", F_OUTPUT)
+    writeln('"i","j"')
+    forall(i in nodes, j in nodes, k in products | getsol(x(i, j, k)) > 0) do
+        writeln(i, ',', j, ',', k, ',', getsol(x(i, j, k)))
+    end-do
+    fclose(F_OUTPUT)
 end-model

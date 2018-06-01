@@ -19,40 +19,31 @@ model "mercasol"
         cap: array(origins, destinations) of real
         ofe: array(origins, products) of real
         dem: array(destinations, products) of real
-        
         x: array(origins, destinations) of mpvar
         y: array(origins, destinations, products) of mpvar
     end-declarations
-    
     initializations from "mosel_input_" + file_name + ".dat"
         costo_var costo_fijo cap ofe dem
     end-initializations
-    
     forall(i in origins, j in destinations) do
         x(i, j) is_binary
     end-do
-    
     forall(j in destinations, k in products) do
         res1(j, k) := sum(i in origins) y(i, j, k) >= dem(j, k)
     end-do
-    
     forall(i in origins, k in products) do
         res2(i, k) := sum(j in destinations) y(i, j, k) <= ofe(i, k)
     end-do
-    
     forall(i in origins, j in destinations) do
         res3(i, j) := (sum(k in products) y(i, j, k)) - cap(i, j) * x(i, j) <= 0
     end-do
-    
-    
     obj := sum(i in origins, j in destinations) (costo_fijo(i, j) * x(i, j) + costo_var(i, j) * sum(k in products) y(i, j, k))
     minimize(obj)
+    writeln(getobjval)
     fopen("mosel_output_" + file_name + ".csv", F_OUTPUT)
     writeln('"i","j","k","quantity"')
     forall(i in origins, j in destinations, k in products | getsol(y(i, j, k)) > 0) do    
         writeln(i, ",", j,",",k,",",getsol(y(i,j,k)))
     end-do
     fclose(F_OUTPUT)
-    
-    
 end-model

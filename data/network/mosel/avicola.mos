@@ -1,6 +1,5 @@
 model "avicola"
     uses "mmxprs";
-    
     declarations
         n: integer
         p: integer
@@ -23,11 +22,9 @@ model "avicola"
     initializations from "mosel_input_" + file_name + ".dat"
         b edges
     end-initializations 
-    
     forall(ee in 1..e) do
         ii := edges(ee, 1)
         jj := edges(ee, 2)
-       
         create(y(ii, jj))
         y(ii, jj) is_binary
         f(ii, jj) := edges(ee, 3)

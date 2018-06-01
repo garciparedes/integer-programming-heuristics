@@ -1,0 +1,4 @@
+model "avicola"
+    uses "mmxprs";
+
+end-model

@@ -46,7 +46,7 @@ model "avicola"
     minimize(obj)
     writeln(getobjval)
     fopen("mosel_output_" + file_name + ".csv", F_OUTPUT)
-    writeln('"i","j"')
+    writeln('"i","j","k","quantity"')
     forall(i in nodes, j in nodes, k in products | getsol(x(i, j, k)) > 0) do
         writeln(i, ',', j, ',', k, ',', getsol(x(i, j, k)))
     end-do
